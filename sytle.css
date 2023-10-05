@@ -1,0 +1,33 @@
+header
+{
+    text-align: center;
+}
+
+body
+{
+    background-color: rgb(64, 64, 64);
+    color: white;
+}
+
+div
+{
+    text-align: center;
+    width: 90%;
+    margin:auto;
+}
+
+table
+{
+    margin: auto;
+    border: 2px solid white;
+    width: 40%;
+}
+
+td
+{
+    width: 30%;
+    padding-top: 20%;
+    border: 2px solid white;
+    cursor: pointer;
+    font-size: 50px;
+}
