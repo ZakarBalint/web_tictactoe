@@ -7,6 +7,15 @@ body
 {
     background-color: rgb(64, 64, 64);
     color: white;
+    font-size: 22px;
+}
+
+.reset
+{
+    width: 100px;
+    height: 40px;
+    font-size: 22px;
+    margin: 10px;
 }
 
 div
@@ -14,6 +23,7 @@ div
     text-align: center;
     width: 90%;
     margin:auto;
+    margin-top: 10px;
 }
 
 table
@@ -25,9 +35,10 @@ table
 
 td
 {
-    width: 30%;
-    padding-top: 20%;
+    height: 200px;
+    width: 200px;
     border: 2px solid white;
     cursor: pointer;
     font-size: 50px;
+    text-align: center;
 }
