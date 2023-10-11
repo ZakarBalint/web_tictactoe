@@ -42,3 +42,8 @@ td
     font-size: 50px;
     text-align: center;
 }
+
+label, button
+{
+    cursor: pointer;
+}
