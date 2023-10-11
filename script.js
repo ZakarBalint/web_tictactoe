@@ -1,71 +1,70 @@
 $(document).ready(function() {
     
-    let game_type = "egyszemelyes";
+    let gameType = "tobbszemelyes";
     
-    $("input[name=GameType][value=egyszemelyes]").attr('checked', 'checked');
-    
-    $('input:radio[name="gameType"]').click(function(){
-        //console.log(this.value);
-        game_type = this.value;
+    $('input:radio[name="gameType"]').click(function(){ //a játékmód változásakor cseréli a változót
+        gameType = this.value;
     })
 
-    $(".reset").click(function() {
+    $(".reset").click(function() { //oldal újratöltése
         location.reload();
     })
-    
+        
 
-    
+    let XComb = []; //X játékos mezői
+    let OComb = []; //O játékos mezői
 
-    let XComb = [];
-    let OComb = [];
+    let nextRound = "X"; //melyik játékos következik ha üres a program megál
 
-    let nextRound = "X";
-
-    $("table").on('click', ".mezo", function(){        
+    $("table").on('click', ".mezo", function(){ //szabad mezőre kattintottak  
             
         if(nextRound == "X")
         {
             $(this).text("X");
             $(this).removeClass("mezo");
             XComb.push($(this).attr('id'));
-            //console.log(XComb);
         }
         else if(nextRound == "O")
         {
             $(this).text("O");
             $(this).removeClass("mezo");
             OComb.push($(this).attr('id'));
-            //console.log(OComb);
         }
-        //console.log(this);
 
         isThereWinner();
     })
 
-    const winningComb = [
-        [0, 1, 2],
-        [3, 4, 5],
-        [6, 7, 8],
-        [0, 3, 6],
-        [1, 4, 7],
-        [2, 5, 8],
-        [0, 4, 8],
-        [2, 4, 6]
-        ]
 
-    function isThereWinner()
+    const winningComb = [ //nyerő kombinációk
+        ["0", "1", "2"],
+        ["3", "4", "5"],
+        ["6", "7", "8"],
+        ["0", "3", "6"],
+        ["1", "4", "7"],
+        ["2", "5", "8"],
+        ["0", "4", "8"],
+        ["2", "4", "6"]
+        ]
+    
+
+    function isThereWinner() //nyertes keresése
     {
-        if(nextRound == "X")
+        if(nextRound == "X") //csak az előző kört vizsgálja
         {
+            //végig megy a nyerő kombinációkon
+
             for (const key in winningComb) {
                 if (Object.hasOwnProperty.call(winningComb, key)) {
                     const element = winningComb[key];
-                    
-                    
-                    if(XComb.indexOf(element[0]) != -1 && XComb.indexOf(element[1]) != -1 && XComb.indexOf(element[2]) != -1)
+
+                    //megvizsgálja a 3 nyerő elemetet a játékosok mezőjéhez képest
+                    if(XComb.includes(element[0]) && XComb.includes(element[1]) && XComb.includes(element[2]))
                     {
                         console.log("Nyert X");
-                
+                        nextRound = "";
+
+                        $(".nyer").text("X nyert!");
+                        return;
                     }
                     
                 }
@@ -73,15 +72,21 @@ $(document).ready(function() {
 
             nextRound = "O";
         }
-        else if(nextRound == "O")
+        else if(nextRound == "O") //csak az előző kört vizsgálja
         {
+            //végig megy a nyerő kombinációkon
             for (const key in winningComb) {
                 if (Object.hasOwnProperty.call(winningComb, key)) {
                     const element = winningComb[key];
                     
-                    if(OComb.indexOf(element[0]) != -1 && OComb.indexOf(element[1]) != -1 && OComb.indexOf(element[2]) != -1)
+                    //megvizsgálja a 3 nyerő elemetet a játékosok mezőjéhez képest
+                    if(OComb.includes(element[0]) && OComb.includes(element[1]) && OComb.includes(element[2]))
                     {
                         console.log("Nyert O");
+                        nextRound = "";
+
+                        $(".nyer").text("O nyert!");
+                        return;
                     }
                     
                 }
@@ -90,27 +95,5 @@ $(document).ready(function() {
             nextRound = "X";
         }
     }
-
-    /*
-    if(game_type == "egyszemelyes")
-    {
-
-        $("td").click(function(){
-            
-
-            
-        })
-
-    }
-    else
-    {
-        $("td").click(function(){
-            
-
-            
-        })
-    }
-    */
-
     
 })

@@ -33,12 +33,21 @@ table
     width: 40%;
 }
 
-td
+.mezo
 {
     height: 200px;
     width: 200px;
     border: 2px solid white;
     cursor: pointer;
+    font-size: 50px;
+    text-align: center;
+}
+
+td
+{
+    height: 200px;
+    width: 200px;
+    border: 2px solid white;
     font-size: 50px;
     text-align: center;
 }
