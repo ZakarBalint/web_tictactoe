@@ -45,7 +45,7 @@ $(document).ready(function() {
     function botLepes()
     {
         let lepet = false;
-
+        
         do
         {
             let random = Math.floor(Math.random() * szMezok.length);
@@ -70,12 +70,14 @@ $(document).ready(function() {
         }while(!lepet);
     }
 
+
     $("table").on('click', ".szMezo", function(){ //szabad mezőre kattintottak  
-        
+
         if(gameType == "egyszemelyes")
         {
             if(nextRound == "X" || nextRound == "O")
-            {     
+            {   
+                disableClick = true;
                 $(this).text("X");
                 $(this).removeClass("szMezo");
                 $(this).addClass("fMezo");
@@ -88,9 +90,9 @@ $(document).ready(function() {
                 {
                     setTimeout(() => {
                         botLepes()
-                    }, 500);
-                    szMezokDB--;
-                    isThereWinner();
+                        szMezokDB--;
+                        isThereWinner();
+                    }, 300);                    
                 }
             }
         }
@@ -130,7 +132,7 @@ $(document).ready(function() {
 
     function isThereWinner() //nyertes keresése
     {
-        if(nextRound == "X" && szMezokDB != 0) //csak az előző kört vizsgálja
+        if(nextRound == "X") //csak az előző kört vizsgálja
         {
             //végig megy a nyerő kombinációkon
 
@@ -155,7 +157,7 @@ $(document).ready(function() {
             $("#nextRoundX").removeClass("highlight");
             $("#nextRoundO").addClass("highlight");
         }
-        else if(nextRound == "O"  && szMezokDB != 0) //csak az előző kört vizsgálja
+        else if(nextRound == "O") //csak az előző kört vizsgálja
         {
             //végig megy a nyerő kombinációkon
             for (const key in winningComb) {
@@ -180,12 +182,12 @@ $(document).ready(function() {
             $("#nextRoundO").removeClass("highlight");
             $("#nextRoundX").addClass("highlight");
         }
-        else if(szMezokDB == 0)
+
+        if(szMezokDB == 0)
         {
             nextRound = "";
             gameType = "";
             $(".nyer").text("Döntetlen!");
-            console.log("Döntetlen!");
 
             return;
         }
