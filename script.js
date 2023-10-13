@@ -4,48 +4,95 @@ $(document).ready(function() {
     
     $('input:radio[name="gameType"]').click(function(){ //a játékmód változásakor cseréli a változót
         gameType = this.value;
-
         $(".game").load(location.href+" .game>*","");
-        XComb = [];
-        OComb = [];
-        szMezok = 9;
-        nextRound = "X";
+        
+        resetGame();
     })
 
-    $(".reset").click(function() { //reseteli a játék állását
+    $(".reset").click(function() { //reseteli táblázatot
         $(".game").load(location.href+" .game>*","");
+        resetGame();
+    })
+
+    function resetGame() //reseteli a változókat
+    {
         XComb = [];
         OComb = [];
-        szMezok = 9;
+        szMezokDB = 9;
         nextRound = "X";
         gameType = $('input:radio[name="gameType"]:checked').val();
-    })
+        $(".nyer").text("");
+        szMezok = [[0,0], [0,1], [0,2], [1,0], [1,1], [1,2], [2,0], [2,1], [2,2]];
+        $("#nextRoundO").removeClass("highlight");
+        $("#nextRoundX").addClass("highlight");
+    }
         
-
     let XComb = []; //X játékos mezői
     let OComb = []; //O játékos mezői
-    let szMezok = 9;
+    let szMezokDB = 9;
 
     let nextRound = "X"; //melyik játékos következik ha üres a program megál
+
+    let szMezok = [[0,0], [0,1], [0,2], [1,0], [1,1], [1,2], [2,0], [2,1], [2,2]];
+
+    const mezoIDk = 
+    [
+        ["0", "1", "2"],
+        ["3", "4", "5"],
+        ["6", "7", "8"]
+    ];
+
+    function botLepes()
+    {
+        let lepet = false;
+
+        do
+        {
+            let random = Math.floor(Math.random() * szMezok.length);
+            let randomMezo = szMezok[random];
+            
+            if($("#"+ mezoIDk[randomMezo[0]][randomMezo[1]]).hasClass("szMezo"))
+            {
+                $(".szMezo#" + mezoIDk[randomMezo[0]][randomMezo[1]]).text("O");
+                $(".szMezo#" + mezoIDk[randomMezo[0]][randomMezo[1]]).addClass("fMezo");
+                $(".szMezo#" + mezoIDk[randomMezo[0]][randomMezo[1]]).removeClass("szMezo");
+                OComb.push($(".fMezo#" + mezoIDk[randomMezo[0]][randomMezo[1]]).attr('id'));
+
+                szMezok.splice(random, 1);
+
+                lepet = true;                
+            }
+            else
+            {
+                szMezok.splice(random, 1);
+            }
+
+        }while(!lepet);
+    }
 
     $("table").on('click', ".szMezo", function(){ //szabad mezőre kattintottak  
         
         if(gameType == "egyszemelyes")
         {
-            if(nextRound == "X")
-            {
+            if(nextRound == "X" || nextRound == "O")
+            {     
                 $(this).text("X");
                 $(this).removeClass("szMezo");
                 $(this).addClass("fMezo");
                 XComb.push($(this).attr('id'));
-            }
-            else if(nextRound == "O")
-            {
 
-            }
+                szMezokDB--;
+                isThereWinner();
 
-            szMezok--;
-            isThereWinner();
+                if(nextRound == "O")
+                {
+                    setTimeout(() => {
+                        botLepes()
+                    }, 500);
+                    szMezokDB--;
+                    isThereWinner();
+                }
+            }
         }
         else if(gameType == "ketszemelyes")
         {
@@ -64,14 +111,10 @@ $(document).ready(function() {
                 OComb.push($(this).attr('id'));
             }
 
-
-            szMezok--;
+            szMezokDB--;
             isThereWinner();
-        }
-        
-        
+        }        
     })
-
 
     const winningComb = [ //nyerő kombinációk
         ["0", "1", "2"],
@@ -87,7 +130,7 @@ $(document).ready(function() {
 
     function isThereWinner() //nyertes keresése
     {
-        if(nextRound == "X" && szMezok != 0) //csak az előző kört vizsgálja
+        if(nextRound == "X" && szMezokDB != 0) //csak az előző kört vizsgálja
         {
             //végig megy a nyerő kombinációkon
 
@@ -104,14 +147,15 @@ $(document).ready(function() {
 
                         $(".nyer").text("X nyert!");
                         return;
-                    }
-                    
+                    }                    
                 }
             }
 
             nextRound = "O";
+            $("#nextRoundX").removeClass("highlight");
+            $("#nextRoundO").addClass("highlight");
         }
-        else if(nextRound == "O"  && szMezok != 0) //csak az előző kört vizsgálja
+        else if(nextRound == "O"  && szMezokDB != 0) //csak az előző kört vizsgálja
         {
             //végig megy a nyerő kombinációkon
             for (const key in winningComb) {
@@ -133,12 +177,15 @@ $(document).ready(function() {
             }
 
             nextRound = "X";
+            $("#nextRoundO").removeClass("highlight");
+            $("#nextRoundX").addClass("highlight");
         }
-        else
+        else if(szMezokDB == 0)
         {
             nextRound = "";
             gameType = "";
             $(".nyer").text("Döntetlen!");
+            console.log("Döntetlen!");
 
             return;
         }

@@ -13,7 +13,7 @@
     <header>
         <h1>Tic tac toe</h1>
     </header>
-
+    <div class="nextRound"><div class="highlight" id="nextRoundX">X</div><div id="nextRoundO">O</div></div>
     <div class="content">
         <table class="game">
             <tr>
@@ -33,8 +33,8 @@
             </tr>
         </table>
         <div>
-            <label><input type="radio" value="egyszemelyes" name="gameType" checked="checked">Egyszemélyes</label>
-            <label><input type="radio" value="ketszemelyes" name="gameType">Kétszemélyes</label>
+            <label id="gameType_egy" class=""><input type="radio" value="egyszemelyes" name="gameType" checked="checked">Egyszemélyes</label>
+            <label id="gameType_ket" class=""><input type="radio" value="ketszemelyes" name="gameType">Kétszemélyes</label>
         </div>
         <div>
             <button class="reset">Reset</button>
